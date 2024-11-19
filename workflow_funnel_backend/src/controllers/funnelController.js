@@ -9,10 +9,20 @@ const {
 // Create a new funnel
 const create = async (req, res) => {
   const { name, steps, analytics } = req.body;
-  const userId = req.user.id; // Authenticated user ID from authMiddleware
+  const userId = req.user.id;
 
   try {
-    const funnel = await createFunnel(userId, name, steps, analytics);
+    if (!name || !steps) {
+      return res
+        .status(400)
+        .json({ message: 'Name and steps are required' });
+    }
+    const funnel = await createFunnel(
+      userId,
+      name,
+      steps,
+      analytics || {}
+    );
     res.status(201).json({ funnel });
   } catch (error) {
     console.error('Error creating funnel:', error);
@@ -40,9 +50,9 @@ const getById = async (req, res) => {
 
   try {
     const funnel = await getFunnelById(id, userId);
-    if (!funnel)
+    if (!funnel) {
       return res.status(404).json({ message: 'Funnel not found' });
-
+    }
     res.status(200).json({ funnel });
   } catch (error) {
     console.error('Error fetching funnel:', error);
@@ -53,20 +63,22 @@ const getById = async (req, res) => {
 // Update a funnel
 const update = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const userId = req.user.id; // Authenticated user ID
   const updates = req.body;
 
   try {
     const updatedFunnel = await updateFunnel(id, userId, updates);
-    if (!updatedFunnel)
+    if (!updatedFunnel) {
       return res.status(404).json({ message: 'Funnel not found' });
-
+    }
     res.status(200).json({ funnel: updatedFunnel });
   } catch (error) {
     console.error('Error updating funnel:', error);
     res.status(500).json({ message: 'Failed to update funnel' });
   }
 };
+
+module.exports = { update };
 
 // Delete a funnel
 const remove = async (req, res) => {
@@ -75,9 +87,9 @@ const remove = async (req, res) => {
 
   try {
     const deletedFunnel = await deleteFunnel(id, userId);
-    if (!deletedFunnel)
+    if (!deletedFunnel) {
       return res.status(404).json({ message: 'Funnel not found' });
-
+    }
     res.status(200).json({ message: 'Funnel deleted successfully' });
   } catch (error) {
     console.error('Error deleting funnel:', error);

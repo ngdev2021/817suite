@@ -9,15 +9,20 @@ const {
 // Create a new workflow
 const create = async (req, res) => {
   const { name, triggers, actions, status } = req.body;
-  const userId = req.user.id; // Authenticated user ID from authMiddleware
+  const userId = req.user.id;
 
   try {
+    if (!name || !triggers || !actions) {
+      return res.status(400).json({
+        message: 'Name, triggers, and actions are required',
+      });
+    }
     const workflow = await createWorkflow(
       userId,
       name,
       triggers,
       actions,
-      status
+      status || 'active'
     );
     res.status(201).json({ workflow });
   } catch (error) {
@@ -46,9 +51,9 @@ const getById = async (req, res) => {
 
   try {
     const workflow = await getWorkflowById(id, userId);
-    if (!workflow)
+    if (!workflow) {
       return res.status(404).json({ message: 'Workflow not found' });
-
+    }
     res.status(200).json({ workflow });
   } catch (error) {
     console.error('Error fetching workflow:', error);
@@ -63,10 +68,13 @@ const update = async (req, res) => {
   const updates = req.body;
 
   try {
+    if (!updates) {
+      return res.status(400).json({ message: 'No updates provided' });
+    }
     const updatedWorkflow = await updateWorkflow(id, userId, updates);
-    if (!updatedWorkflow)
+    if (!updatedWorkflow) {
       return res.status(404).json({ message: 'Workflow not found' });
-
+    }
     res.status(200).json({ workflow: updatedWorkflow });
   } catch (error) {
     console.error('Error updating workflow:', error);
@@ -81,9 +89,9 @@ const remove = async (req, res) => {
 
   try {
     const deletedWorkflow = await deleteWorkflow(id, userId);
-    if (!deletedWorkflow)
+    if (!deletedWorkflow) {
       return res.status(404).json({ message: 'Workflow not found' });
-
+    }
     res
       .status(200)
       .json({ message: 'Workflow deleted successfully' });

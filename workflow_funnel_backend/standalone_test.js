@@ -135,10 +135,10 @@ async function runTests() {
       });
     }
 
-    await pool.query('DELETE FROM users WHERE email = $1', [
-      'newuser@example.com',
-    ]);
-    console.log('Database cleaned up.');
+    // await pool.query('DELETE FROM users WHERE email = $1', [
+    //   'newuser@example.com',
+    // ]);
+    // console.log('Database cleaned up.');
     await pool.end();
   }
 }

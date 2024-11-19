@@ -17,7 +17,7 @@ router.use(authMiddleware);
 router.post('/', create); // Create a new funnel
 router.get('/', getAll); // Get all funnels for the user
 router.get('/:id', getById); // Get a specific funnel
-router.patch('/:id', update); // Update a funnel
+router.put('/:id', update); // Update a funnel
 router.delete('/:id', remove); // Delete a funnel
 
 module.exports = router;

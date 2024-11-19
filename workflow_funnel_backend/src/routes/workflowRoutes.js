@@ -17,7 +17,7 @@ router.use(authMiddleware);
 router.post('/', create); // Create a new workflow
 router.get('/', getAll); // Get all workflows for the user
 router.get('/:id', getById); // Get a specific workflow
-router.patch('/:id', update); // Update a workflow
+router.put('/:id', update); // Update a workflow
 router.delete('/:id', remove); // Delete a workflow
 
 module.exports = router;
