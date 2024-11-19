@@ -9,6 +9,7 @@ import WorkflowList from './components/Dashboard/WorkflowList';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Dashboard from './components/Dashboard/Dashboard';
+import './index.css';
 
 const isAuthenticated = () => {
   return !!localStorage.getItem('token'); // Check if token exists
